@@ -844,6 +844,13 @@ def libero_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
 def openvla_libero_spatial_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
     """Maps trajectory from source dataset to target dataset config."""
     
+    # Process gripper action: clip to [0,1] and invert
+    gripper_action = trajectory["action"][:, -1:]
+    gripper_action = invert_gripper_actions(tf.clip_by_value(gripper_action, 0, 1))
+    
+    # Reconstruct action with processed gripper
+    action = tf.concat([trajectory["action"][:, :6], gripper_action], axis=1)
+    
     transformed_trajectory = {
         'observation': {
             'image': trajectory['observation']['image'],
@@ -851,7 +858,7 @@ def openvla_libero_spatial_dataset_transform(trajectory: Dict[str, Any]) -> Dict
             'state': trajectory['observation']['state'],
             'joint_state': trajectory['observation']['joint_state'],
         },
-        'action': trajectory['action'],  # Keep as 7D, no padding
+        'action': action,
     }
     
     # Copy over all other fields unchanged
@@ -860,6 +867,7 @@ def openvla_libero_spatial_dataset_transform(trajectory: Dict[str, Any]) -> Dict
         transformed_trajectory[copy_key] = trajectory[copy_key]
     
     return transformed_trajectory
+
 
 # === Registry ===
 OXE_STANDARDIZATION_TRANSFORMS = {
