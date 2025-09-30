@@ -841,6 +841,32 @@ def libero_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
     return trajectory
 
 
+def openvla_libero_spatial_dataset_transform(step: Dict[str, Any]) -> Dict[str, Any]:
+    """Maps step from source dataset to target dataset config.
+       Input is dict of numpy arrays."""
+    
+    # Pad action from 7D to 8D
+    # Add terminate episode flag: 1.0 if last step, 0.0 otherwise
+    terminate_flag = 1.0 if step['is_last'] else 0.0
+    action_padded = np.concatenate([step['action'], [terminate_flag]]).astype(np.float32)
+    
+    transformed_step = {
+        'observation': {
+            'image': step['observation']['image'],
+            'wrist_image': step['observation']['wrist_image'],
+            'state': step['observation']['state'],
+            'joint_state': step['observation']['joint_state'],
+        },
+        'action': action_padded,
+    }
+    
+    # Copy over all other fields unchanged
+    for copy_key in ['discount', 'reward', 'is_first', 'is_last', 'is_terminal',
+                     'language_instruction', 'language_embedding']:
+        transformed_step[copy_key] = step[copy_key]
+    
+    return transformed_step
+
 # === Registry ===
 OXE_STANDARDIZATION_TRANSFORMS = {
     "bridge_oxe": bridge_oxe_dataset_transform,
@@ -919,4 +945,5 @@ OXE_STANDARDIZATION_TRANSFORMS = {
     "libero_object_no_noops": libero_dataset_transform,
     "libero_goal_no_noops": libero_dataset_transform,
     "libero_10_no_noops": libero_dataset_transform,
+    "openvla_libero_spatial": openvla_libero_spatial_dataset_transform,
 }

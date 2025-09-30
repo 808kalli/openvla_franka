@@ -670,4 +670,11 @@ OXE_DATASET_CONFIGS = {
         "state_encoding": StateEncoding.POS_EULER,
         "action_encoding": ActionEncoding.EEF_POS,
     },
+    "openvla_libero_spatial": {
+        "image_obs_keys": {"primary": "image", "secondary": None, "wrist": "wrist_image"},
+        "depth_obs_keys": {"primary": None, "secondary": None, "wrist": None},
+        "state_obs_keys": ["state"],  # Your 8D state: [3x pos, 3x orient, 2x gripper]
+        "state_encoding": StateEncoding.POS_EULER,  # 3x position + 3x euler angles
+        "action_encoding": ActionEncoding.EEF_POS,  # 6D pose delta + gripper
+    },
 }
