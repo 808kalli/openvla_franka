@@ -841,28 +841,30 @@ def libero_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
     return trajectory
 
 
-def openvla_libero_spatial_dataset_transform(step: Dict[str, Any]) -> Dict[str, Any]:
-    """Maps step from source dataset to target dataset config.
-    Input is dict of tensorflow tensors."""
+def openvla_libero_spatial_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
+    """Maps trajectory from source dataset to target dataset config.
+    Input is dict of tensorflow tensors with batch dimension."""
     # Pad action from 7D to 8D
     # Add terminate episode flag: 1.0 if last step, 0.0 otherwise
-    terminate_flag = tf.cast(step['is_last'], tf.float32)
-    terminate_flag = tf.reshape(terminate_flag, [1])
+    # trajectory['is_last'] has shape [batch_size] with boolean values
+    terminate_flags = tf.cast(trajectory['is_last'], tf.float32)
+    # Reshape to [batch_size, 1] for concatenation
+    terminate_flags = tf.expand_dims(terminate_flags, axis=-1)
     
     action_padded = tf.concat(
         [
-            tf.cast(step['action'], tf.float32),
-            terminate_flag
+            tf.cast(trajectory['action'], tf.float32),  # [batch_size, 7]
+            terminate_flags  # [batch_size, 1]
         ],
-        axis=0
+        axis=-1  # Concatenate along action dimension -> [batch_size, 8]
     )
     
-    transformed_step = {
+    transformed_trajectory = {
         'observation': {
-            'image': step['observation']['image'],
-            'wrist_image': step['observation']['wrist_image'],
-            'state': step['observation']['state'],
-            'joint_state': step['observation']['joint_state'],
+            'image': trajectory['observation']['image'],
+            'wrist_image': trajectory['observation']['wrist_image'],
+            'state': trajectory['observation']['state'],
+            'joint_state': trajectory['observation']['joint_state'],
         },
         'action': action_padded,
     }
@@ -870,9 +872,9 @@ def openvla_libero_spatial_dataset_transform(step: Dict[str, Any]) -> Dict[str, 
     # Copy over all other fields unchanged
     for copy_key in ['discount', 'reward', 'is_first', 'is_last', 'is_terminal',
                      'language_instruction', 'language_embedding']:
-        transformed_step[copy_key] = step[copy_key]
+        transformed_trajectory[copy_key] = trajectory[copy_key]
     
-    return transformed_step
+    return transformed_trajectory
 
 # === Registry ===
 OXE_STANDARDIZATION_TRANSFORMS = {
