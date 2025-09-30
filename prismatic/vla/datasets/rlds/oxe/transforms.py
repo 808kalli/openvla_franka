@@ -842,17 +842,22 @@ def libero_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def openvla_libero_spatial_dataset_transform(step: Dict[str, Any]) -> Dict[str, Any]:
-    """Maps step from source dataset to target dataset config.
-    Input is dict of numpy arrays."""
+    """Maps step from source dataset to target dataset config."""
     # Pad action from 7D to 8D
     # Add terminate episode flag: 1.0 if last step, 0.0 otherwise
-    terminate_flag = 1.0 if step['is_last'] else 0.0
+    terminate_flag = tf.cond(
+        step['is_last'],
+        lambda: tf.constant(1.0, dtype=tf.float32),
+        lambda: tf.constant(0.0, dtype=tf.float32)
+    )
     
-    # Use TensorFlow operations
+    # Reshape terminate_flag to [1] for concatenation
+    terminate_flag = tf.reshape(terminate_flag, [1])
+    
     action_padded = tf.concat(
         [
-            tf.cast(step['action'], tf.float32),  # Explicit cast to ensure dtype
-            tf.constant([terminate_flag], dtype=tf.float32)
+            tf.cast(step['action'], tf.float32),
+            terminate_flag
         ],
         axis=-1
     )
