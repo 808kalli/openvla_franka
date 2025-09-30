@@ -842,22 +842,7 @@ def libero_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def openvla_libero_spatial_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
-    """Maps trajectory from source dataset to target dataset config.
-    Input is dict of tensorflow tensors with batch dimension."""
-    # Pad action from 7D to 8D
-    # Add terminate episode flag: 1.0 if last step, 0.0 otherwise
-    # trajectory['is_last'] has shape [batch_size] with boolean values
-    terminate_flags = tf.cast(trajectory['is_last'], tf.float32)
-    # Reshape to [batch_size, 1] for concatenation
-    terminate_flags = tf.expand_dims(terminate_flags, axis=-1)
-    
-    action_padded = tf.concat(
-        [
-            tf.cast(trajectory['action'], tf.float32),  # [batch_size, 7]
-            terminate_flags  # [batch_size, 1]
-        ],
-        axis=-1  # Concatenate along action dimension -> [batch_size, 8]
-    )
+    """Maps trajectory from source dataset to target dataset config."""
     
     transformed_trajectory = {
         'observation': {
@@ -866,7 +851,7 @@ def openvla_libero_spatial_dataset_transform(trajectory: Dict[str, Any]) -> Dict
             'state': trajectory['observation']['state'],
             'joint_state': trajectory['observation']['joint_state'],
         },
-        'action': action_padded,
+        'action': trajectory['action'],  # Keep as 7D, no padding
     }
     
     # Copy over all other fields unchanged

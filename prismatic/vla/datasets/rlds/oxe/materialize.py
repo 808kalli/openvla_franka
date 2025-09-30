@@ -35,13 +35,8 @@ def make_oxe_dataset_kwargs(
     # [Contract] For EEF_POS & EEF_R6 actions, only the last action dimension (gripper) is absolute!
     # Normalize all action dimensions *except* the gripper
     if dataset_kwargs["action_encoding"] is ActionEncoding.EEF_POS:
-        # Check if this is the openvla_libero_spatial dataset with 8D actions (7 + terminate flag)
-        if dataset_name == "openvla_libero_spatial":
-            dataset_kwargs["absolute_action_mask"] = [False] * 7 + [True]  # 8 elements
-            dataset_kwargs["action_normalization_mask"] = [True] * 7 + [False]  # 8 elements
-        else:
-            dataset_kwargs["absolute_action_mask"] = [False] * 6 + [True]  # 7 elements
-            dataset_kwargs["action_normalization_mask"] = [True] * 6 + [False]  # 7 elements
+        dataset_kwargs["absolute_action_mask"] = [False] * 6 + [True]
+        dataset_kwargs["action_normalization_mask"] = [True] * 6 + [False]
     elif dataset_kwargs["action_encoding"] is ActionEncoding.EEF_R6:
         dataset_kwargs["absolute_action_mask"] = [False] * 9 + [True]
         dataset_kwargs["action_normalization_mask"] = [True] * 9 + [False]

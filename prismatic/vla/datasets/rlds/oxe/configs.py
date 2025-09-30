@@ -676,6 +676,5 @@ OXE_DATASET_CONFIGS = {
         "state_obs_keys": ["state"],
         "state_encoding": StateEncoding.POS_EULER,
         "action_encoding": ActionEncoding.EEF_POS,
-        "absolute_action_mask": [False, False, False, False, False, False, False, False],  # 8D: 7 action dims + 1 terminate flag
     },
 }
