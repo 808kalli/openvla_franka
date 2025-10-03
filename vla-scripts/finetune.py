@@ -507,7 +507,7 @@ def save_checkpoint(
             'batch_idx': batch_idx,
             'optimizer_state_dict': optimizer.state_dict(),
             'rng_state': torch.get_rng_state(),
-            'cuda_rng_state': torch.cuda.get_rng_state_all(),
+            'cuda_rng_state': [state.cpu() for state in torch.cuda.get_rng_state_all()],  # Move to CPU
         }
         torch.save(training_state, checkpoint_dir / "training_state.pt")
 
@@ -542,14 +542,21 @@ def load_checkpoint(checkpoint_dir, optimizer, device_id, distributed_state):
     if distributed_state.is_main_process:
         print(f"Loading training state from {training_state_path}")
     
-    training_state = torch.load(training_state_path, map_location=f'cuda:{device_id}')
+    training_state = torch.load(training_state_path, map_location='cpu')  # Load to CPU first
     
     # Restore optimizer state
     optimizer.load_state_dict(training_state['optimizer_state_dict'])
     
     # Restore RNG states
-    torch.set_rng_state(training_state['rng_state'].cpu())
-    torch.cuda.set_rng_state_all(training_state['cuda_rng_state'])
+    torch.set_rng_state(training_state['rng_state'])
+    
+    # Restore CUDA RNG states - ensure they're ByteTensors
+    cuda_rng_states = training_state['cuda_rng_state']
+    if isinstance(cuda_rng_states, list):
+        # Convert to ByteTensor if needed and move to appropriate device
+        cuda_rng_states = [state.to(torch.uint8) if state.dtype != torch.uint8 else state 
+                          for state in cuda_rng_states]
+        torch.cuda.set_rng_state_all(cuda_rng_states)
     
     if distributed_state.is_main_process:
         print(f"Resumed from gradient step {training_state['gradient_step_idx']}, batch {training_state['batch_idx']}")
