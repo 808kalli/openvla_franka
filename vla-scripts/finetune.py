@@ -662,11 +662,20 @@ def finetune(cfg: FinetuneConfig) -> None:
     # Load checkpoint state if resuming
     start_gradient_step = 0
     start_batch_idx = 0
+    print(f"DEBUG: cfg.resume = {cfg.resume}")
+    print(f"DEBUG: checkpoint_dir = {checkpoint_dir}")
     if cfg.resume:
+        print("DEBUG: Attempting to load checkpoint...")
         training_state = load_checkpoint(checkpoint_dir, optimizer, device_id, distributed_state)
+        print(f"DEBUG: training_state returned: {training_state is not None}")
         if training_state is not None:
             start_gradient_step = training_state['gradient_step_idx']
             start_batch_idx = training_state['batch_idx']
+            print(f"DEBUG: Loaded - start_gradient_step={start_gradient_step}, start_batch_idx={start_batch_idx}")
+        else:
+            print("DEBUG: training_state was None!")
+    else:
+        print("DEBUG: cfg.resume is False, not loading checkpoint")
 
     # Create Action Tokenizer
     action_tokenizer = ActionTokenizer(processor.tokenizer)
