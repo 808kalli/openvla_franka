@@ -713,9 +713,12 @@ def finetune(cfg: FinetuneConfig) -> None:
         vla.train()
         optimizer.zero_grad()
         
-        for batch_idx, batch in enumerate(dataloader):
+        # Track actual batch position
+        actual_batch_idx = start_batch_idx
+        
+        for enum_idx, batch in enumerate(dataloader):
             # Skip batches if resuming from checkpoint
-            if batch_idx < start_batch_idx:
+            if enum_idx < start_batch_idx:
                 continue
             
             with torch.autocast("cuda", dtype=torch.bfloat16):
@@ -757,8 +760,8 @@ def finetune(cfg: FinetuneConfig) -> None:
             recent_action_accuracies.append(action_accuracy.item())
             recent_l1_losses.append(action_l1_loss.item())
 
-            # Compute gradient step index
-            gradient_step_idx = batch_idx // cfg.grad_accumulation_steps
+            # Compute gradient step index using actual batch position
+            gradient_step_idx = actual_batch_idx // cfg.grad_accumulation_steps
 
             # Compute smoothened train metrics
             #   =>> Equal to current step metrics when not using gradient accumulation
@@ -779,7 +782,7 @@ def finetune(cfg: FinetuneConfig) -> None:
                 )
 
             # Optimizer Step
-            if (batch_idx + 1) % cfg.grad_accumulation_steps == 0:
+            if (actual_batch_idx + 1) % cfg.grad_accumulation_steps == 0:
                 optimizer.step()
                 optimizer.zero_grad()
                 progress.update()
@@ -789,7 +792,7 @@ def finetune(cfg: FinetuneConfig) -> None:
                 if cfg.save_latest_checkpoint_only:
                     # Overwrite latest checkpoint
                     save_checkpoint(
-                        vla, optimizer, gradient_step_idx, batch_idx,
+                        vla, optimizer, gradient_step_idx, actual_batch_idx,
                         run_dir, processor, vla_dataset, cfg,
                         distributed_state, adapter_dir if cfg.use_lora else None
                     )
@@ -803,10 +806,13 @@ def finetune(cfg: FinetuneConfig) -> None:
                         os.makedirs(adapter_dir_step, exist_ok=True)
                     
                     save_checkpoint(
-                        vla, optimizer, gradient_step_idx, batch_idx,
+                        vla, optimizer, gradient_step_idx, actual_batch_idx,
                         checkpoint_dir_step, processor, vla_dataset, cfg,
                         distributed_state, adapter_dir_step
                     )
+
+            # Increment actual batch index
+            actual_batch_idx += 1
 
             # Stop training when max_steps is reached
             if gradient_step_idx == cfg.max_steps:
