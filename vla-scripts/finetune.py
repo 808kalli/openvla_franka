@@ -593,6 +593,18 @@ def finetune(cfg: FinetuneConfig) -> None:
     run_dir, adapter_dir = cfg.run_root_dir / exp_id, cfg.adapter_tmp_dir / exp_id
     os.makedirs(run_dir, exist_ok=True)
 
+    # Initialize Logging =>> W&B
+    if distributed_state.is_main_process:
+        # Resume W&B run if resuming training
+        wandb_id = f"ft+{exp_id}"
+        wandb.init(
+            entity=cfg.wandb_entity, 
+            project=cfg.wandb_project, 
+            name=wandb_id,
+            id=wandb_id if cfg.resume else None,
+            resume="allow" if cfg.resume else None
+        )
+
     # Determine checkpoint directory for resumption
     checkpoint_dir = cfg.resume_from_checkpoint if cfg.resume_from_checkpoint is not None else run_dir
 
@@ -690,18 +702,6 @@ def finetune(cfg: FinetuneConfig) -> None:
         collate_fn=collator,
         num_workers=0,  # Important =>> Set to 0 if using RLDS; TFDS rolls its own parallelism!
     )
-
-    # Initialize Logging =>> W&B
-    if distributed_state.is_main_process:
-        # Resume W&B run if resuming training
-        wandb_id = f"ft+{exp_id}"
-        wandb.init(
-            entity=cfg.wandb_entity, 
-            project=cfg.wandb_project, 
-            name=wandb_id,
-            id=wandb_id if cfg.resume else None,
-            resume="allow" if cfg.resume else None
-        )
 
     # Deque to store recent train metrics (used for computing smoothened metrics for gradient accumulation)
     recent_losses = deque(maxlen=cfg.grad_accumulation_steps)
