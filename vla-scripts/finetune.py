@@ -601,9 +601,8 @@ def finetune(cfg: FinetuneConfig) -> None:
             entity=cfg.wandb_entity, 
             project=cfg.wandb_project, 
             name=wandb_id,
-            id=wandb_id if cfg.resume else None,
-            resume="allow" if cfg.resume else None,
-            settings=wandb.Settings(init_timeout=300)  # 5 minute timeout
+            id=None,
+            resume=None,
         )
 
     # Determine checkpoint directory for resumption
