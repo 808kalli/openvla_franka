@@ -1312,3 +1312,17 @@ Saved rollout MP4 at path ./rollouts/2025_10_10/2025_10_10-16_58_04--episode=185
 Success: False
 # episodes completed so far: 185
 # successes: 2 (1.1%)
+
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+Starting episode 6...
+Saved rollout MP4 at path ./rollouts/2025_10_10/2025_10_10-16_58_04--episode=186--success=False--task=pick_up_the_black_bowl_on_the_wooden_cabinet_and_p.mp4
+Success: False
+# episodes completed so far: 186
+# successes: 2 (1.1%)
+
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+Starting episode 7...
+Saved rollout MP4 at path ./rollouts/2025_10_10/2025_10_10-16_58_04--episode=187--success=False--task=pick_up_the_black_bowl_on_the_wooden_cabinet_and_p.mp4
+Success: False
+# episodes completed so far: 187
+# successes: 2 (1.1%)
