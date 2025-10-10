@@ -1326,3 +1326,10 @@ Saved rollout MP4 at path ./rollouts/2025_10_10/2025_10_10-16_58_04--episode=187
 Success: False
 # episodes completed so far: 187
 # successes: 2 (1.1%)
+
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+Starting episode 8...
+Saved rollout MP4 at path ./rollouts/2025_10_10/2025_10_10-16_58_04--episode=188--success=False--task=pick_up_the_black_bowl_on_the_wooden_cabinet_and_p.mp4
+Success: False
+# episodes completed so far: 188
+# successes: 2 (1.1%)
