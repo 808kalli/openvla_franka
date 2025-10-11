@@ -1333,3 +1333,89 @@ Saved rollout MP4 at path ./rollouts/2025_10_10/2025_10_10-16_58_04--episode=188
 Success: False
 # episodes completed so far: 188
 # successes: 2 (1.1%)
+
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+Starting episode 9...
+Saved rollout MP4 at path ./rollouts/2025_10_10/2025_10_10-16_58_04--episode=189--success=False--task=pick_up_the_black_bowl_on_the_wooden_cabinet_and_p.mp4
+Success: False
+# episodes completed so far: 189
+# successes: 2 (1.1%)
+
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+Starting episode 10...
+Saved rollout MP4 at path ./rollouts/2025_10_10/2025_10_10-16_58_04--episode=190--success=False--task=pick_up_the_black_bowl_on_the_wooden_cabinet_and_p.mp4
+Success: False
+# episodes completed so far: 190
+# successes: 2 (1.1%)
+
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+Starting episode 11...
+Saved rollout MP4 at path ./rollouts/2025_10_10/2025_10_10-16_58_04--episode=191--success=False--task=pick_up_the_black_bowl_on_the_wooden_cabinet_and_p.mp4
+Success: False
+# episodes completed so far: 191
+# successes: 2 (1.0%)
+
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+Starting episode 12...
+Saved rollout MP4 at path ./rollouts/2025_10_10/2025_10_10-16_58_04--episode=192--success=False--task=pick_up_the_black_bowl_on_the_wooden_cabinet_and_p.mp4
+Success: False
+# episodes completed so far: 192
+# successes: 2 (1.0%)
+
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+Starting episode 13...
+Saved rollout MP4 at path ./rollouts/2025_10_10/2025_10_10-16_58_04--episode=193--success=False--task=pick_up_the_black_bowl_on_the_wooden_cabinet_and_p.mp4
+Success: False
+# episodes completed so far: 193
+# successes: 2 (1.0%)
+
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+Starting episode 14...
+Saved rollout MP4 at path ./rollouts/2025_10_10/2025_10_10-16_58_04--episode=194--success=False--task=pick_up_the_black_bowl_on_the_wooden_cabinet_and_p.mp4
+Success: False
+# episodes completed so far: 194
+# successes: 2 (1.0%)
+
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+Starting episode 15...
+Saved rollout MP4 at path ./rollouts/2025_10_10/2025_10_10-16_58_04--episode=195--success=False--task=pick_up_the_black_bowl_on_the_wooden_cabinet_and_p.mp4
+Success: False
+# episodes completed so far: 195
+# successes: 2 (1.0%)
+
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+Starting episode 16...
+Saved rollout MP4 at path ./rollouts/2025_10_10/2025_10_10-16_58_04--episode=196--success=False--task=pick_up_the_black_bowl_on_the_wooden_cabinet_and_p.mp4
+Success: False
+# episodes completed so far: 196
+# successes: 2 (1.0%)
+
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+Starting episode 17...
+Saved rollout MP4 at path ./rollouts/2025_10_10/2025_10_10-16_58_04--episode=197--success=False--task=pick_up_the_black_bowl_on_the_wooden_cabinet_and_p.mp4
+Success: False
+# episodes completed so far: 197
+# successes: 2 (1.0%)
+
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+Starting episode 18...
+Saved rollout MP4 at path ./rollouts/2025_10_10/2025_10_10-16_58_04--episode=198--success=False--task=pick_up_the_black_bowl_on_the_wooden_cabinet_and_p.mp4
+Success: False
+# episodes completed so far: 198
+# successes: 2 (1.0%)
+
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+Starting episode 19...
+Saved rollout MP4 at path ./rollouts/2025_10_10/2025_10_10-16_58_04--episode=199--success=False--task=pick_up_the_black_bowl_on_the_wooden_cabinet_and_p.mp4
+Success: False
+# episodes completed so far: 199
+# successes: 2 (1.0%)
+
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+Starting episode 20...
+Saved rollout MP4 at path ./rollouts/2025_10_10/2025_10_10-16_58_04--episode=200--success=False--task=pick_up_the_black_bowl_on_the_wooden_cabinet_and_p.mp4
+Success: False
+# episodes completed so far: 200
+# successes: 2 (1.0%)
+Current task success rate: 0.0
+Current total success rate: 0.01
